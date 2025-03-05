@@ -13,6 +13,9 @@ langchain-anthropic
 langchain-google-genai
 google-generativeai
 
+# Embedding model for Google
+langchain-google-vertexai
+
 # Hugging Face Integration
 langchain-huggingface
 transformers

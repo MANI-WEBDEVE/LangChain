@@ -40,3 +40,5 @@ dist/
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+embedding-model-test-69bd14ba3494.json
