@@ -1,19 +1,36 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 from langchain_google_genai import ChatGoogleGenerativeAI
+from dotenv import load_dotenv
+load_dotenv()
 
-# Step 1: Define structured output with Pydantic
-class PersonInfo(BaseModel):
-    name: str
-    age: int
-    profession: str
+"""
+BaseModel: Pydantic ka core class, jisse data schema define karte hain.
 
-# Step 2: Initialize your model (replace with OpenAI if needed)
+Field: Fields ke descriptions aur constraints add karne ke liye (e.g., description="...").
+
+field_validator: Custom validation rules banane ke liye 18.
+
+"""
+
+class Joke(BaseModel):
+    """Joke to tell user."""
+    
+    setup: str = Field(description="Joke ka setup, question form mein")
+    punchline: str = Field(description="Joke ka punchline, answer form mein")
+    rating: int = Field(ge=1, le=10, description="Joke ka rating 1-10 ke beech")
+
+    @field_validator('setup')
+    def validate_setup(cls, v):
+        if v[-1] != '?':
+            raise ValueError("Setup must end with '?'")
+        return v
+    
 model = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0)
 
-# Step 3: Use with_structured_output
-structured_output = model.with_structured_output(PersonInfo)
+structured_output = model.with_structured_output(Joke)
 
-# Step 4: Prompt
-response = structured_output.invoke("Aik software engineer ka naam, age aur profession btao amaerica site.")
-
-print(response)
+try:
+    joke = structured_output.invoke("Tell me a joke about WOMEN in Hindi")
+    print(joke)
+except Exception as e:
+    print(f"Error: {e}")
