@@ -30,7 +30,7 @@ model = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0)
 structured_output = model.with_structured_output(Joke)
 
 try:
-    joke = structured_output.invoke("Tell me a joke about WOMEN in Hindi")
+    joke = structured_output.invoke("Tell me a joke about WOMEN in Hindi and every time new joke generate")
     print(joke)
 except Exception as e:
     print(f"Error: {e}")
